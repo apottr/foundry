@@ -1,8 +1,11 @@
 module.exports = {
-	entry: './src/main.js',
+	entry: {
+    'index': './src/main.js',
+    'annotate': './src/annotate.js'
+  },
 	output: {
-		path: './dist',
-		filename: 'bundle.js'
+		path: './static',
+		filename: '[name].js'
 	},
 	module: {
 		loaders: [

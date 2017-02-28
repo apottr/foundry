@@ -1,14 +1,27 @@
-from flask import Flask
-
+from flask import Flask,url_for,render_template,request
+import json
+from tinydb import TinyDB
 app = Flask(__name__)
 
-def load_html(f):
-    return open('dist/{}.html'.format(f)).read()
+db = TinyDB('tiny.db')
+cards = db.table('cards')
 
 @app.route('/')
 def index():
-    return load_html('index')
+    return render_template('main.html',page='index')
 
+@app.route('/annotate')
+def annotate(id):
+    return render_template('main.html',page='annotate')
+
+@app.route('/ajax/cards')
+def get_sets():
+    if request.method != "POST":
+        return json.dumps(cards.all())
+    else:
+        return cards.insert({'folder': request.form['folder'], 
+                            'name': request.form['name'], 
+                            'freq': request.form['frequency']})
 
 if __name__ == "__main__":
     app.run()
